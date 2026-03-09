@@ -2,6 +2,8 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <meta name="description" content="HytaleHub — Guide, Wiki, Modding et communauté Hytale"/>
 <meta name="theme-color" content="#070b18"/>
@@ -10,8 +12,17 @@
 <meta property="og:title" content="HytaleHub — L'encyclopédie d'Orbis"/>
 <meta property="og:description" content="Guide, Wiki, Modding et communauté Hytale"/>
 <meta property="og:type" content="website"/>
+<meta property="og:image" content="https://ntxuntecsbmocyftdvvg.supabase.co/storage/v1/object/public/assets/og-image.png"/>
+<meta property="og:url" content="https://hytalehub.netlify.app"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="HytaleHub — L&#39;encyclopédie d&#39;Orbis"/>
+<meta name="twitter:description" content="Guide, Wiki, Modding et communauté Hytale"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>"/>
 <title>HytaleHub — L'encyclopédie d'Orbis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="dns-prefetch" href="https://fonts.gstatic.com"/>
+<link rel="dns-prefetch" href="https://ntxuntecsbmocyftdvvg.supabase.co"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Eczar:wght@400;600;800&display=swap" rel="stylesheet"/>
 <style>
@@ -32,6 +43,21 @@
   // ✅ SÉCURITÉ : La clé "anon" Supabase est une clé PUBLIQUE (safe côté client)
   // Les vraies règles de sécurité sont définies via Row Level Security (RLS) dans Supabase.
   window.SUPABASE_URL  = "https://ntxuntecsbmocyftdvvg.supabase.co";
+  // ── Rate Limiter IA — protection anti-spam ──────────────────────────
+  window.__iaRateLimit = {
+    calls: [],
+    maxPerMinute: 10,
+    maxPerHour: 30,
+    canCall: function() {
+      const now = Date.now();
+      this.calls = this.calls.filter(t => now - t < 3600000);
+      const lastMinute = this.calls.filter(t => now - t < 60000).length;
+      return lastMinute < this.maxPerMinute && this.calls.length < this.maxPerHour;
+    },
+    register: function() { this.calls.push(Date.now()); }
+  };
+  // ────────────────────────────────────────────────────────────────────
+
   window.SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50eHVudGVjc2Jtb2N5ZnRkdnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5OTc0NTMsImV4cCI6MjA4ODU3MzQ1M30.kVWbj-NRdKJktnNg0qC0bmpyB0ULMxF4Ly-1OVTCg6Y";
   // ── Kweeby Forge IA — clé ANTHROPIC : ne JAMAIS committer sur GitHub ──────
   // window.ANTHROPIC_KEY = "sk-ant-...";
@@ -41,6 +67,7 @@
 </head>
 <body>
 <div id="root"></div>
+<noscript><div style="text-align:center;padding:40px;font-family:serif;color:#aac;background:#070b18;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column"><h1 style="font-size:2em;margin-bottom:16px">🌍 HytaleHub</h1><p>JavaScript est requis pour utiliser HytaleHub.<br>Merci d'activer JavaScript dans votre navigateur.</p></div></noscript>
 <script>(() => {
 (() => {
   var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -13594,7 +13621,7 @@ function useT() { if(!window.__appLang)window.__appLang="fr";
   };
 }
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Eczar:wght@400;600;800&display=swap');
+/* Google Fonts chargées via <link> dans le <head> */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 input,button,textarea{font-family:inherit}
 button{transition:opacity .15s ease,transform .15s ease}
@@ -13859,13 +13886,21 @@ function KweebyCorner({ hasTabBar = false }) {
     const userMsg = { role: "user", text };
     const history = [...messages, userMsg];
     setMessages(history);
+    if (window.__iaRateLimit && !window.__iaRateLimit.canCall()) {
+      setMessages((prev) => [...prev, { role: "assistant", text: "⏳ Trop de messages envoyés. Attends une minute avant de continuer." }]);
+      return;
+    }
+    if (window.__iaRateLimit) window.__iaRateLimit.register();
     setLoading(true);
     playAnim("wave", 2200);
     const apiMessages = history.filter((m, i) => !(i === 0 && m.role === "assistant")).filter((m) => m.type !== "img" && m.type !== "img-loading").map((m) => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.text || "" }));
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: Object.assign(
+          { "Content-Type": "application/json" },
+          window.ANTHROPIC_KEY ? { "x-api-key": window.ANTHROPIC_KEY, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" } : {}
+        ),
         body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 800, system: getKweebySystem(), messages: apiMessages })
       });
       const data = await res.json();
@@ -18993,7 +19028,7 @@ function ProfileScreen({ userName, currentLang = "fr", currentEmoji = "\u{1F33F}
 const SCREENS = ["login", "welcome", "name", "qcm", "home"];
 var SCREENS2 = ["login", "welcome", "name", "qcm", "home"];
 var CSS2 = `
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Eczar:wght@400;600;800&display=swap');
+/* Google Fonts chargées via <link> dans le <head> */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 input,button,textarea{font-family:inherit}
 ::-webkit-scrollbar{width:3px}
@@ -22145,6 +22180,11 @@ LANGUE : R\xE9ponds TOUJOURS en ${window.__appLang === "en" ? "English" : window
       const userMsg = { role: "user", text };
       const history = [...messages, userMsg];
       setMessages(history);
+      if (window.__iaRateLimit && !window.__iaRateLimit.canCall()) {
+        setMessages((prev) => [...prev, { role: "assistant", text: "⏳ Trop de messages envoyés. Attends une minute avant de continuer." }]);
+        return;
+      }
+      if (window.__iaRateLimit) window.__iaRateLimit.register();
       setLoading(true);
       playAnim2("wave", 2200);
       const apiMessages = history.filter((m, i) => !(i === 0 && m.role === "assistant")).filter((m) => m.type !== "img" && m.type !== "img-loading").map((m) => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.text || "" }));
@@ -24981,7 +25021,7 @@ window.App = App;
     } else {
       ReactDOM.render(React.createElement(window.App), root);
     }
-    console.log('[HytaleHub] v5.0 loaded ✓');
+    /* console.log('[HytaleHub] v5.0 loaded ✓'); */
   } catch(e) {
     console.error('[HytaleHub] Render error:', e);
     root.innerHTML = '<div style="color:#ff6b6b;padding:40px;font-family:monospace;text-align:center"><div style="font-size:32px;margin-bottom:16px">⚠️</div><div>Erreur: ' + e.message + '</div></div>';
