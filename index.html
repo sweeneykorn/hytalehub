@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes,viewport-fit=cover"/>
 <meta name="description" content="HytaleHub — Guide, Wiki, Modding et communauté Hytale"/>
 <meta name="theme-color" content="#070b18"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -14262,12 +14262,23 @@ function Stars() {
   )));
 }
 function getQCM(t2) {
-  return [
-    { id: "explorer", icon: "\u{1F5FA}\uFE0F", label: t2("qcm_explorer_label"), desc: t2("qcm_explorer_desc"), color: C.green },
-    { id: "builder", icon: "\u{1F3D7}\uFE0F", label: t2("qcm_builder_label"), desc: t2("qcm_builder_desc"), color: C.gold },
-    { id: "modder", icon: "\u2699\uFE0F", label: t2("qcm_modder_label"), desc: t2("qcm_modder_desc"), color: C.blue },
-    { id: "all", icon: "\u2694\uFE0F", label: t2("qcm_all_label"), desc: t2("qcm_all_desc"), color: "#9a4ae8" }
-  ];
+  // Spécialités — remplace l'ancien QCM 4 choix
+  return AUTH_TAGS.map(function(tag) {
+    var meta = {
+      "Explorateur":  { icon: "🗺️",  color: "#3dbb52", desc: "Zones, biomes, créatures" },
+      "Constructeur": { icon: "🏗️",  color: "#e0a030", desc: "Bâtisseur de structures" },
+      "Combattant":   { icon: "⚔️",  color: "#e05030", desc: "PvP, boss, arènes" },
+      "Moddeur":      { icon: "⚙️",  color: "#5a8de8", desc: "Mods, NPCs, scripts" },
+      "Chasseur":     { icon: "🏹",  color: "#6bb8f0", desc: "Farming, loots, raids" },
+      "Alchimiste":   { icon: "⚗️",  color: "#9a4ae8", desc: "Potions, enchants, craft" },
+      "Stratège":     { icon: "🎯",  color: "#e8aa5a", desc: "Tactique, guildes, guerre" },
+      "Collecteur":   { icon: "💎",  color: "#4ab8b0", desc: "Ressources rares, trésors" },
+      "Speedrunner":  { icon: "⚡",  color: "#f0d060", desc: "Records, optimisation" },
+      "Lore Keeper":  { icon: "📜",  color: "#c080e0", desc: "Histoire, lore, mystères" }
+    };
+    var m = meta[tag] || { icon: "⭐", color: C.blue, desc: "" };
+    return { id: tag, icon: m.icon, label: tag, desc: m.desc, color: m.color };
+  });
 }
 function getAllModules(t2) {
   return [
@@ -15795,7 +15806,7 @@ function ZonesView() {
     /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: z2.color, opacity: 0.75 } }),
     /* @__PURE__ */ React.createElement("span", { style: { fontSize: 22, flexShrink: 0 } }, z2.icon),
     /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 7, marginBottom: 3 } }, /* @__PURE__ */ React.createElement("span", { style: { color: z2.color, fontSize: 7.5, letterSpacing: 2.5, fontFamily: "'Cinzel',serif", opacity: 0.8 } }, "ZONE ", z2.num), /* @__PURE__ */ React.createElement(DiffBar, { level: z2.diff })), /* @__PURE__ */ React.createElement("div", { style: { color: "#ddeeff", fontSize: 13, fontWeight: 700, fontFamily: "'Cinzel',serif" } }, _z(z2.name)), /* @__PURE__ */ React.createElement("div", { style: { color: WC.textSub, fontSize: 10.5, fontFamily: "'Crimson Pro',serif" } }, _z(z2.element), " \xB7 ", _z(z2.biomes).length, " biomes")),
-    /* @__PURE__ */ React.createElement("div", { style: { textAlign: "right", flexShrink: 0 } }, /* @__PURE__ */ React.createElement(Pill, { color: z2.color }, z2.bossIcon, " ", _z(z2.boss).split(" ")[0]), /* @__PURE__ */ React.createElement("div", { style: { color: WC.textSub, fontSize: 9.5, marginTop: 5 } }, "\u2192"))
+    /* @__PURE__ */ React.createElement("div", { style: { textAlign: "right", flexShrink: 0 } }, /* @__PURE__ */ React.createElement(Pill, { color: z2.color }, z2.bossIcon, " ", (typeof _z(z2.boss) === "string" ? _z(z2.boss) : "").split(" ")[0]), /* @__PURE__ */ React.createElement("div", { style: { color: WC.textSub, fontSize: 9.5, marginTop: 5 } }, "\u2192"))
   ))), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 11, padding: 10, background: WC.blueDim, border: `1px solid ${WC.b0}`, borderRadius: 10 } }, /* @__PURE__ */ React.createElement("div", { style: { color: WC.blueL, fontSize: 7.5, letterSpacing: 2.5, fontFamily: "'Cinzel',serif", marginBottom: 4 } }, "\u{1F30A} OC\xC9AN PROFOND"), /* @__PURE__ */ React.createElement("p", { style: { color: WC.textSub, fontSize: 10.5, fontFamily: "'Crimson Pro',serif", lineHeight: 1.6 } }, 'Zone sp\xE9ciale s\xE9parant les continents. Qualifi\xE9e de "zone \xE0 part enti\xE8re" par les devs. C\xF4tier (s\xFBr) \u2192 R\xE9cifs coralliens (ressources) \u2192 Abysses (dangereux, cr\xE9atures rares).')));
 }
 function FactionsView() {
@@ -18181,10 +18192,13 @@ function ForgeIAView() {
       const prompt = buildModPrompt(ans, custom, []);
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: Object.assign(
+          { "Content-Type": "application/json" },
+          window.ANTHROPIC_KEY ? { "x-api-key": window.ANTHROPIC_KEY, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" } : {}
+        ),
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514",
-          max_tokens: 1e3,
+          max_tokens: 1500,
           system: getUnifiedModSystem(),
           messages: [{ role: "user", content: prompt }]
         })
@@ -22583,12 +22597,22 @@ LANGUE : R\xE9ponds TOUJOURS en ${window.__appLang === "en" ? "English" : window
     );
   }
   function getQCM2(t3) {
-    return [
-      { id: "explorer", icon: "\u{1F5FA}\uFE0F", label: t3("qcm_explorer_label"), desc: t3("qcm_explorer_desc"), color: C.green },
-      { id: "builder", icon: "\u{1F3D7}\uFE0F", label: t3("qcm_builder_label"), desc: t3("qcm_builder_desc"), color: C.gold },
-      { id: "modder", icon: "\u2699\uFE0F", label: t3("qcm_modder_label"), desc: t3("qcm_modder_desc"), color: C.blue },
-      { id: "all", icon: "\u2694\uFE0F", label: t3("qcm_all_label"), desc: t3("qcm_all_desc"), color: "#9a4ae8" }
-    ];
+    return AUTH_TAGS.map(function(tag) {
+      var meta2 = {
+        "Explorateur":  { icon: "🗺️",  color: "#3dbb52", desc: "Zones, biomes, créatures" },
+        "Constructeur": { icon: "🏗️",  color: "#e0a030", desc: "Bâtisseur de structures" },
+        "Combattant":   { icon: "⚔️",  color: "#e05030", desc: "PvP, boss, arènes" },
+        "Moddeur":      { icon: "⚙️",  color: "#5a8de8", desc: "Mods, NPCs, scripts" },
+        "Chasseur":     { icon: "🏹",  color: "#6bb8f0", desc: "Farming, loots, raids" },
+        "Alchimiste":   { icon: "⚗️",  color: "#9a4ae8", desc: "Potions, enchants, craft" },
+        "Stratège":     { icon: "🎯",  color: "#e8aa5a", desc: "Tactique, guildes, guerre" },
+        "Collecteur":   { icon: "💎",  color: "#4ab8b0", desc: "Ressources rares, trésors" },
+        "Speedrunner":  { icon: "⚡",  color: "#f0d060", desc: "Records, optimisation" },
+        "Lore Keeper":  { icon: "📜",  color: "#c080e0", desc: "Histoire, lore, mystères" }
+      };
+      var m2 = meta2[tag] || { icon: "⭐", color: C.blue, desc: "" };
+      return { id: tag, icon: m2.icon, label: tag, desc: m2.desc, color: m2.color };
+    });
   }
   function getAllModules2(t3) {
     return [
@@ -22679,7 +22703,7 @@ LANGUE : R\xE9ponds TOUJOURS en ${window.__appLang === "en" ? "English" : window
       padding: 11,
       marginBottom: 12,
       opacity: z.bossUnavailable ? 0.65 : 1
-    } }, /* @__PURE__ */ React.createElement("div", { style: { color: WC2.red, fontSize: 7.5, letterSpacing: 3, fontFamily: "'Cinzel',serif", marginBottom: 5 } }, "\u26A0 BOSS", z.bossUnavailable ? " \xB7 \xC0 VENIR" : ""), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 9 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 24 } }, z.bossIcon), /* @__PURE__ */ React.createElement("span", { style: { color: "#ddeeff", fontSize: 13.5, fontWeight: 700, fontFamily: "'Cinzel',serif" } }, _z2(z.boss)))), /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { color: WC2.blueL, fontSize: 7.5, letterSpacing: 3, fontFamily: "'Cinzel',serif", marginBottom: 6 } }, t3("zone_structures")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 5 } }, z.structures.map((s) => /* @__PURE__ */ React.createElement(Pill2, { key: s, color: WC2.blueL }, s)))), /* @__PURE__ */ React.createElement("div", { style: { background: `${z.color}0c`, border: `1px solid ${z.color}25`, borderRadius: 9, padding: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { color: z.color, fontSize: 7.5, letterSpacing: 3, fontFamily: "'Cinzel',serif", marginBottom: 8 } }, t3("zone_tips")), z.tips.map((t4, i) => /* @__PURE__ */ React.createElement("div", { key: i, style: { display: "flex", gap: 7, marginBottom: 8 } }, /* @__PURE__ */ React.createElement("span", { style: { color: z.color, fontSize: 9, flexShrink: 0, marginTop: 2 } }, "\u25B8"), /* @__PURE__ */ React.createElement("span", { style: { color: WC2.textMid, fontSize: 11.5, fontFamily: "'Crimson Pro',serif", lineHeight: 1.6 } }, t4)))));
+    } }, /* @__PURE__ */ React.createElement("div", { style: { color: WC2.red, fontSize: 7.5, letterSpacing: 3, fontFamily: "'Cinzel',serif", marginBottom: 5 } }, "\u26A0 BOSS", z.bossUnavailable ? " \xB7 \xC0 VENIR" : ""), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 9 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 24 } }, z.bossIcon), /* @__PURE__ */ React.createElement("span", { style: { color: "#ddeeff", fontSize: 13.5, fontWeight: 700, fontFamily: "'Cinzel',serif" } }, _z2(z.boss)))), /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { color: WC2.blueL, fontSize: 7.5, letterSpacing: 3, fontFamily: "'Cinzel',serif", marginBottom: 6 } }, t3("zone_structures")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 5 } }, (Array.isArray(z.structures) ? z.structures : _z2(z.structures) || []).map((s) => /* @__PURE__ */ React.createElement(Pill2, { key: s, color: WC2.blueL }, s)))), /* @__PURE__ */ React.createElement("div", { style: { background: `${z.color}0c`, border: `1px solid ${z.color}25`, borderRadius: 9, padding: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { color: z.color, fontSize: 7.5, letterSpacing: 3, fontFamily: "'Cinzel',serif", marginBottom: 8 } }, t3("zone_tips")), (Array.isArray(z.tips) ? z.tips : _z2(z.tips) || []).map((t4, i) => /* @__PURE__ */ React.createElement("div", { key: i, style: { display: "flex", gap: 7, marginBottom: 8 } }, /* @__PURE__ */ React.createElement("span", { style: { color: z.color, fontSize: 9, flexShrink: 0, marginTop: 2 } }, "\u25B8"), /* @__PURE__ */ React.createElement("span", { style: { color: WC2.textMid, fontSize: 11.5, fontFamily: "'Crimson Pro',serif", lineHeight: 1.6 } }, t4)))));
     return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(SectionHead2, { icon: "\u{1F30D}", title: t3("zones_title"), sub: t3("zones_sub") }), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 9 } }, ZONES2.map((z2) => /* @__PURE__ */ React.createElement(
       "div",
       {
@@ -22710,7 +22734,7 @@ LANGUE : R\xE9ponds TOUJOURS en ${window.__appLang === "en" ? "English" : window
       /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: z2.color, opacity: 0.75 } }),
       /* @__PURE__ */ React.createElement("span", { style: { fontSize: 22, flexShrink: 0 } }, z2.icon),
       /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 7, marginBottom: 3 } }, /* @__PURE__ */ React.createElement("span", { style: { color: z2.color, fontSize: 7.5, letterSpacing: 2.5, fontFamily: "'Cinzel',serif", opacity: 0.8 } }, "ZONE ", z2.num), /* @__PURE__ */ React.createElement(DiffBar2, { level: z2.diff })), /* @__PURE__ */ React.createElement("div", { style: { color: "#ddeeff", fontSize: 13, fontWeight: 700, fontFamily: "'Cinzel',serif" } }, _z2(z2.name)), /* @__PURE__ */ React.createElement("div", { style: { color: WC2.textSub, fontSize: 10.5, fontFamily: "'Crimson Pro',serif" } }, _z2(z2.element), " \xB7 ", z2.biomes.length, " biomes")),
-      /* @__PURE__ */ React.createElement("div", { style: { textAlign: "right", flexShrink: 0 } }, /* @__PURE__ */ React.createElement(Pill2, { color: z2.color }, z2.bossIcon, " ", z2.boss.split(" ")[0]), /* @__PURE__ */ React.createElement("div", { style: { color: WC2.textSub, fontSize: 9.5, marginTop: 5 } }, "\u2192"))
+      /* @__PURE__ */ React.createElement("div", { style: { textAlign: "right", flexShrink: 0 } }, /* @__PURE__ */ React.createElement(Pill2, { color: z2.color }, z2.bossIcon, " ", (typeof z2.boss === "string" ? z2.boss : z2.boss && (z2.boss[window.__appLang || "fr"] || z2.boss.fr || "")).split(" ")[0]), /* @__PURE__ */ React.createElement("div", { style: { color: WC2.textSub, fontSize: 9.5, marginTop: 5 } }, "\u2192"))
     ))), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 11, padding: 10, background: WC2.blueDim, border: `1px solid ${WC2.b0}`, borderRadius: 10 } }, /* @__PURE__ */ React.createElement("div", { style: { color: WC2.blueL, fontSize: 7.5, letterSpacing: 2.5, fontFamily: "'Cinzel',serif", marginBottom: 4 } }, "\u{1F30A} OC\xC9AN PROFOND"), /* @__PURE__ */ React.createElement("p", { style: { color: WC2.textSub, fontSize: 10.5, fontFamily: "'Crimson Pro',serif", lineHeight: 1.6 } }, 'Zone sp\xE9ciale s\xE9parant les continents. Qualifi\xE9e de "zone \xE0 part enti\xE8re" par les devs. C\xF4tier (s\xFBr) \u2192 R\xE9cifs coralliens (ressources) \u2192 Abysses (dangereux, cr\xE9atures rares).')));
   }
   function FactionsView2() {
@@ -25051,6 +25075,33 @@ window.App = App;
   }
 })();
 })();</script>
+<script>
+// ── Fix clavier virtuel mobile — empêche le texte de disparaître ─────
+(function() {
+  var root = document.getElementById('root');
+  function onViewportResize() {
+    var vv = window.visualViewport;
+    if (!vv || !root) return;
+    // Compenser le décalage causé par le clavier virtuel
+    var offsetY = (window.innerHeight - vv.height - vv.offsetTop);
+    root.style.transform = offsetY > 10
+      ? 'translateY(-' + Math.round(vv.offsetTop) + 'px)'
+      : '';
+    root.style.height = vv.height + 'px';
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', onViewportResize);
+    window.visualViewport.addEventListener('scroll', onViewportResize);
+  }
+  // Fallback pour navigateurs sans visualViewport
+  window.addEventListener('resize', function() {
+    if (!window.visualViewport && root) {
+      root.style.height = window.innerHeight + 'px';
+    }
+  });
+})();
+</script>
+
 <script>
 // ── PWA Service Worker ──────────────────────────────────────────────────────
 if ("serviceWorker" in navigator) {
