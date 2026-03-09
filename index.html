@@ -20,6 +20,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>"/>
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>"/>
 <title>HytaleHub — L'encyclopédie d'Orbis</title>
+<link rel="manifest" href="/manifest.json"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="dns-prefetch" href="https://fonts.gstatic.com"/>
 <link rel="dns-prefetch" href="https://ntxuntecsbmocyftdvvg.supabase.co"/>
@@ -19251,6 +19252,25 @@ function AuthScreen(_ref) {
 
   // ── Login ────────────────────────────────────────────────────────────────
   function handleLogin() {
+    // ── ACCÈS DÉMO RAPIDE : pseudo = "1", mdp = "1" ──────────────────────
+    if (email.trim() === "1" && pass === "1") {
+      setLoading(true); setErr(null);
+      setTimeout(function() {
+        onSuccess({
+          id: "demo-preview",
+          email: "demo@hytalehub.com",
+          app_metadata: { provider: "demo" },
+          user_metadata: {
+            full_name: "Kweeby",
+            avatar_emoji: "🌿",
+            profile_tags: ["Explorateur", "Moddeur"]
+          }
+        });
+        setLoading(false);
+      }, 400);
+      return;
+    }
+    // ─────────────────────────────────────────────────────────────────────
     var e = validate("login"); if (e) { setErr(e); return; }
     setLoading(true); setErr(null);
     if (!sb) {
@@ -19338,6 +19358,9 @@ function AuthScreen(_ref) {
     }
     return RE("div",{style:{textAlign:"center",marginTop:8,padding:"5px 10px",
       background:"rgba(255,180,0,0.07)",border:"1px solid rgba(255,180,0,0.18)",borderRadius:8}},
+      RE("div",{style:{color:"rgba(255,180,0,0.9)",fontSize:8.5,fontFamily:"'Cinzel',serif",letterSpacing:1.2,marginBottom:3}},"🔑 ACCÈS DÉMO RAPIDE"),
+      RE("div",{style:{color:"rgba(255,200,80,0.85)",fontSize:10,fontFamily:"'Crimson Pro',serif",marginBottom:2}},"Email : ",RE("b",null,"1"),"  ·  Mot de passe : ",RE("b",null,"1")),
+      /* original content continues: */
       RE("div",{style:{color:"rgba(255,180,0,0.7)",fontSize:8,fontFamily:"'Cinzel',serif",letterSpacing:1}},"MODE DÉMO"),
       RE("div",{style:{color:"rgba(160,185,220,0.35)",fontSize:9,fontFamily:"'Crimson Pro',serif",marginTop:2}},
         "Supabase non connecté")
@@ -25028,5 +25051,42 @@ window.App = App;
   }
 })();
 })();</script>
+<script>
+// ── PWA Service Worker ──────────────────────────────────────────────────────
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("/sw.js")
+      .then(function(reg) {
+        // SW enregistré — vérifie les mises à jour toutes les heures
+        setInterval(function() { reg.update(); }, 3600000);
+      })
+      .catch(function(err) {
+        // SW non disponible (dev local, file://, etc.) — pas bloquant
+      });
+  });
+}
+// ── Install prompt PWA ──────────────────────────────────────────────────────
+var deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Expose globalement pour pouvoir l'appeler depuis l'UI
+  window.__pwaInstallPrompt = function() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(r) {
+        deferredPrompt = null;
+        window.__pwaInstallPrompt = null;
+      });
+    }
+  };
+  // Dispatcher un event custom pour que React puisse l'écouter
+  window.dispatchEvent(new CustomEvent("pwaInstallAvailable"));
+});
+window.addEventListener("appinstalled", function() {
+  deferredPrompt = null;
+  window.__pwaInstallPrompt = null;
+});
+</script>
 </body>
 </html>
