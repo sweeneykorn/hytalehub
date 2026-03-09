@@ -14262,22 +14262,32 @@ function Stars() {
   )));
 }
 function getQCM(t2) {
-  // Spécialités — remplace l'ancien QCM 4 choix
+  var _l = typeof window !== "undefined" && window.__appLang || "fr";
+  var DESC = {
+    "Explorateur":  { fr: "Zones, biomes, créatures",       en: "Zones, biomes, creatures",       pt: "Zonas, biomas, criaturas",       ru: "Зоны, биомы, существа" },
+    "Constructeur": { fr: "Bâtisseur de structures",        en: "Builder of structures",           pt: "Construtor de estruturas",       ru: "Строитель сооружений" },
+    "Combattant":   { fr: "PvP, boss, arènes",              en: "PvP, bosses, arenas",             pt: "PvP, boss, arenas",              ru: "ПвП, боссы, арены" },
+    "Moddeur":      { fr: "Mods, NPCs, scripts",            en: "Mods, NPCs, scripts",             pt: "Mods, NPCs, scripts",            ru: "Моды, НПС, скрипты" },
+    "Chasseur":     { fr: "Farming, loots, raids",          en: "Farming, loots, raids",           pt: "Farming, loots, raids",          ru: "Фарминг, лут, рейды" },
+    "Mage":         { fr: "Magie, sorts, enchants",         en: "Magic, spells, enchants",         pt: "Magia, feitiços, encantos",      ru: "Магия, заклинания, чары" },
+    "Stratège":     { fr: "Tactique, guildes, guerre",      en: "Tactics, guilds, warfare",        pt: "Tática, guildas, guerra",        ru: "Тактика, гильдии, война" },
+    "Collecteur":   { fr: "Ressources rares, trésors",      en: "Rare resources, treasures",       pt: "Recursos raros, tesouros",       ru: "Редкие ресурсы, сокровища" },
+    "Speedrunner":  { fr: "Records, optimisation",          en: "Records, optimization",           pt: "Records, otimização",            ru: "Рекорды, оптимизация" },
+    "Lore Keeper":  { fr: "Histoire, lore, mystères",       en: "History, lore, mysteries",        pt: "História, lore, mistérios",      ru: "История, лор, тайны" }
+  };
+  var ICONS = {
+    "Explorateur": "🗺️", "Constructeur": "🪵", "Combattant": "⚔️",
+    "Moddeur": "⚙️", "Chasseur": "🏹", "Mage": "✨",
+    "Stratège": "🎯", "Collecteur": "💎", "Speedrunner": "⚡", "Lore Keeper": "📜"
+  };
+  var COLORS = {
+    "Explorateur": "#3dbb52", "Constructeur": "#e0a030", "Combattant": "#e05030",
+    "Moddeur": "#5a8de8", "Chasseur": "#6bb8f0", "Mage": "#9a4ae8",
+    "Stratège": "#e8aa5a", "Collecteur": "#4ab8b0", "Speedrunner": "#f0d060", "Lore Keeper": "#c080e0"
+  };
   return AUTH_TAGS.map(function(tag) {
-    var meta = {
-      "Explorateur":  { icon: "🗺️",  color: "#3dbb52", desc: "Zones, biomes, créatures" },
-      "Constructeur": { icon: "🏗️",  color: "#e0a030", desc: "Bâtisseur de structures" },
-      "Combattant":   { icon: "⚔️",  color: "#e05030", desc: "PvP, boss, arènes" },
-      "Moddeur":      { icon: "⚙️",  color: "#5a8de8", desc: "Mods, NPCs, scripts" },
-      "Chasseur":     { icon: "🏹",  color: "#6bb8f0", desc: "Farming, loots, raids" },
-      "Alchimiste":   { icon: "⚗️",  color: "#9a4ae8", desc: "Potions, enchants, craft" },
-      "Stratège":     { icon: "🎯",  color: "#e8aa5a", desc: "Tactique, guildes, guerre" },
-      "Collecteur":   { icon: "💎",  color: "#4ab8b0", desc: "Ressources rares, trésors" },
-      "Speedrunner":  { icon: "⚡",  color: "#f0d060", desc: "Records, optimisation" },
-      "Lore Keeper":  { icon: "📜",  color: "#c080e0", desc: "Histoire, lore, mystères" }
-    };
-    var m = meta[tag] || { icon: "⭐", color: C.blue, desc: "" };
-    return { id: tag, icon: m.icon, label: tag, desc: m.desc, color: m.color };
+    var d = DESC[tag] || {};
+    return { id: tag, icon: ICONS[tag] || "⭐", label: tag, desc: d[_l] || d.fr || "", color: COLORS[tag] || C.blue };
   });
 }
 function getAllModules(t2) {
@@ -19103,7 +19113,7 @@ input::placeholder{color:rgba(160,185,220,0.3)!important}
 // ═══════════════════════════════════════════════════════════════════════════
 
 var AUTH_EMOJIS = ["🌿","⚔️","🧙","🏹","🐉","🦅","🌊","🔥","⚡","🌙","💎","🗡️","🛡️","🧪","🌸","🎯","🦊","🐺","🦁","🌋","❄️","🌟","🏔️","🎭","🦄"];
-var AUTH_TAGS   = ["Explorateur","Constructeur","Combattant","Moddeur","Chasseur","Alchimiste","Stratège","Collecteur","Speedrunner","Lore Keeper"];
+var AUTH_TAGS   = ["Explorateur","Constructeur","Combattant","Moddeur","Chasseur","Mage","Stratège","Collecteur","Speedrunner","Lore Keeper"];
 
 // ─── helper : est-ce un compte anonyme Supabase ? ───────────────────────────
 function isAnonymousUser(u) {
@@ -22597,21 +22607,32 @@ LANGUE : R\xE9ponds TOUJOURS en ${window.__appLang === "en" ? "English" : window
     );
   }
   function getQCM2(t3) {
+    var _l2 = typeof window !== "undefined" && window.__appLang || "fr";
+    var DESC2 = {
+      "Explorateur":  { fr: "Zones, biomes, créatures",       en: "Zones, biomes, creatures",       pt: "Zonas, biomas, criaturas",       ru: "Зоны, биомы, существа" },
+      "Constructeur": { fr: "Bâtisseur de structures",        en: "Builder of structures",           pt: "Construtor de estruturas",       ru: "Строитель сооружений" },
+      "Combattant":   { fr: "PvP, boss, arènes",              en: "PvP, bosses, arenas",             pt: "PvP, boss, arenas",              ru: "ПвП, боссы, арены" },
+      "Moddeur":      { fr: "Mods, NPCs, scripts",            en: "Mods, NPCs, scripts",             pt: "Mods, NPCs, scripts",            ru: "Моды, НПС, скрипты" },
+      "Chasseur":     { fr: "Farming, loots, raids",          en: "Farming, loots, raids",           pt: "Farming, loots, raids",          ru: "Фарминг, лут, рейды" },
+      "Mage":         { fr: "Magie, sorts, enchants",         en: "Magic, spells, enchants",         pt: "Magia, feitiços, encantos",      ru: "Магия, заклинания, чары" },
+      "Stratège":     { fr: "Tactique, guildes, guerre",      en: "Tactics, guilds, warfare",        pt: "Tática, guildas, guerra",        ru: "Тактика, гильдии, война" },
+      "Collecteur":   { fr: "Ressources rares, trésors",      en: "Rare resources, treasures",       pt: "Recursos raros, tesouros",       ru: "Редкие ресурсы, сокровища" },
+      "Speedrunner":  { fr: "Records, optimisation",          en: "Records, optimization",           pt: "Records, otimização",            ru: "Рекорды, оптимизация" },
+      "Lore Keeper":  { fr: "Histoire, lore, mystères",       en: "History, lore, mysteries",        pt: "História, lore, mistérios",      ru: "История, лор, тайны" }
+    };
+    var ICONS2 = {
+      "Explorateur": "🗺️", "Constructeur": "🪵", "Combattant": "⚔️",
+      "Moddeur": "⚙️", "Chasseur": "🏹", "Mage": "✨",
+      "Stratège": "🎯", "Collecteur": "💎", "Speedrunner": "⚡", "Lore Keeper": "📜"
+    };
+    var COLORS2 = {
+      "Explorateur": "#3dbb52", "Constructeur": "#e0a030", "Combattant": "#e05030",
+      "Moddeur": "#5a8de8", "Chasseur": "#6bb8f0", "Mage": "#9a4ae8",
+      "Stratège": "#e8aa5a", "Collecteur": "#4ab8b0", "Speedrunner": "#f0d060", "Lore Keeper": "#c080e0"
+    };
     return AUTH_TAGS.map(function(tag) {
-      var meta2 = {
-        "Explorateur":  { icon: "🗺️",  color: "#3dbb52", desc: "Zones, biomes, créatures" },
-        "Constructeur": { icon: "🏗️",  color: "#e0a030", desc: "Bâtisseur de structures" },
-        "Combattant":   { icon: "⚔️",  color: "#e05030", desc: "PvP, boss, arènes" },
-        "Moddeur":      { icon: "⚙️",  color: "#5a8de8", desc: "Mods, NPCs, scripts" },
-        "Chasseur":     { icon: "🏹",  color: "#6bb8f0", desc: "Farming, loots, raids" },
-        "Alchimiste":   { icon: "⚗️",  color: "#9a4ae8", desc: "Potions, enchants, craft" },
-        "Stratège":     { icon: "🎯",  color: "#e8aa5a", desc: "Tactique, guildes, guerre" },
-        "Collecteur":   { icon: "💎",  color: "#4ab8b0", desc: "Ressources rares, trésors" },
-        "Speedrunner":  { icon: "⚡",  color: "#f0d060", desc: "Records, optimisation" },
-        "Lore Keeper":  { icon: "📜",  color: "#c080e0", desc: "Histoire, lore, mystères" }
-      };
-      var m2 = meta2[tag] || { icon: "⭐", color: C.blue, desc: "" };
-      return { id: tag, icon: m2.icon, label: tag, desc: m2.desc, color: m2.color };
+      var d2 = DESC2[tag] || {};
+      return { id: tag, icon: ICONS2[tag] || "⭐", label: tag, desc: d2[_l2] || d2.fr || "", color: COLORS2[tag] || C.blue };
     });
   }
   function getAllModules2(t3) {
